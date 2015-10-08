@@ -6,7 +6,6 @@
 %     6. acceleration:  continuous
 %     7. model year:    multi-valued discrete
 %     8. origin:        multi-valued discrete
-%     9. car name:      string (unique for each instance)
 
 %problem 1
 load('data.txt');
@@ -22,8 +21,27 @@ label = low + med + high;
 gplotmatrix(data, [], label);
 
 %problem 3
-result = OLS([ones(392,1), data(:,2)], mpg);
+[coef, mat] = OLS(data(:,2), mpg, 1);
 
 %problem 4
 training = data(1:280, :);
-testing = data(281:392, :)
+testing = data(281:392, :);
+
+
+for i = 2:8
+    hold off
+    figure
+    plot(training(:,i),mpg(1:280), 'c*')
+    hold on
+    for j = 0:4
+    [prediction, mat] = OLS(training(:, i), mpg(1:280), j);
+    ypred = mat*prediction;
+    mse = sum(((ypred-mpg(1:280)).^2)/280)
+    plot(training(:,i),ypred, 'b*')
+    
+    end
+    
+
+end
+
+
