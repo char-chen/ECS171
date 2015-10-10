@@ -31,13 +31,15 @@ testing = data(281:392, :);
 for i = 2:8
     hold off
     figure
-    plot(training(:,i),mpg(1:280), 'c*')
+    scatter(training(:,i),mpg(1:280))
     hold on
     for j = 0:4
     [prediction, mat] = OLS(training(:, i), mpg(1:280), j);
-    ypred = mat*prediction;
-    mse = sum(((ypred-mpg(1:280)).^2)/280)
-    plot(training(:,i),ypred, 'b*')
+    l = min(data(:,i)):0.1:max(data(:,i));
+
+    ypred = x*prediction;
+    %mse = sum(((ypred-mpg(1:280)).^2)/280)
+    plot(x,ypred)
     
     end
     
