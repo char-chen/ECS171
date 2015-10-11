@@ -25,13 +25,13 @@ sigma = zeros(1, size(X, 2));
 %
 % Hint: You might find the 'mean' and 'std' functions useful.
 %       
+  
 
-
-
-
-
-
-
+% Calculates mean and std dev for each feature
+for i=1:size(mu,2)
+    mu(1,i) = mean(X(:,i)); 
+    stddev(1,i) = std(X(:,i));
+    X_norm(:,i) = (X(:,i)-mu(1,i))/stddev(1,i); 
 
 
 % ============================================================
