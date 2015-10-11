@@ -1,11 +1,11 @@
-%     1. mpg:           continuous
-%     2. cylinders:     multi-valued discrete
-%     3. displacement:  continuous
-%     4. horsepower:    continuous
-%     5. weight:        continuous
-%     6. acceleration:  continuous
-%     7. model year:    multi-valued discrete
-%     8. origin:        multi-valued discrete
+% 1. mpg:           continuous
+% 2. cylinders:     multi-valued discret
+% 3. displacement:  continuous
+% 4. horsepower:    continuous
+% 5. weight:        continuous
+% 6. acceleration:  continuous
+% 7. model year:    multi-valued discrete
+% 8. origin:        multi-valued discrete
 
 %problem 1
 load('data.txt');
@@ -20,30 +20,55 @@ high = 3 * (mpg > boundary(2));
 label = low + med + high;
 gplotmatrix(data, [], label);
 
-%problem 3
-[coef, mat] = OLS(data(:,2), mpg, 1);
+%problem 3 - OLS.m
 
 %problem 4
-training = data(1:280, :);
-testing = data(281:392, :);
+rng(100);
+[training, trainingSampleIndex] = datasample(data, 280, 'Replace', false);
+testing = [];
 
+for i = 1:392
+  if ~ismember(i, trainSampleIndex)
+    training = [training; data(i, :)];
+  end
+end
 
 for i = 2:8
-    hold off
-    figure
-    scatter(training(:,i),mpg(1:280))
-    hold on
-    for j = 0:4
-    [prediction, mat] = OLS(training(:, i), mpg(1:280), j);
-    l = min(data(:,i)):0.1:max(data(:,i));
+  hold off
+  figure
+  scatter(testing(:,i), mpg(281:392))
+  hold
+  xlabel(sprintf('#%d feature', i));
+  ylabel('mpg');
+  t = (min(data(:,i)):0.1:max(data(:,i)))';
 
-    ypred = x*prediction;
-    %mse = sum(((ypred-mpg(1:280)).^2)/280)
-    plot(x,ypred)
-    
+  for j = 0:4 
+    prediction = OLS(training(:, i), mpg(1:280), j);
+    l = [];
+    for k = 0 : j
+        l = [l t.^k ];    
     end
-    
+    ypred = l * prediction;
+    plot(t, ypred)
 
+
+     test = [];
+    for k = 0: j
+      test = [test training(:,i).^k] ;   
+    end
+
+    y = test * prediction;
+    mse1 = sum((y-mpg(1:280)).^2)/280
+
+
+    test = [];
+     for k = 0: j
+      test = [test training(:,i).^k] ;   
+    end
+    y = test * prediction;
+    mse2 = sum((y-mpg(281:392)).^2)/112;
+
+  end
 end
 
 
