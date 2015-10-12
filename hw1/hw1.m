@@ -23,7 +23,7 @@ gplotmatrix(data, [], label);
 % problem 3 - OLS.m
 
 % problem 4
-rng(100);
+rng(50);
 trainingIndex = randsample(392, 280);
 training = [];
 testing = [];
@@ -193,4 +193,11 @@ t2 = [t2 testing(:,2:8)];
     
     % problem #7
     
-    car = [1 6 300 170 3600 ]
+    car = [6 300 170 3600 9 80 1];
+    car = [1 car car.^2];
+    prediction_car_mpg = car * theta
+    car = [1 6 300 170 3600 9 80 1];
+    p1 = 1/(1 + exp(-car * classifier1))
+    p2 = 1/(1 + exp(-car * classifier2))
+    p3 = 1/(1 + exp(-car * classifier3))
+    
