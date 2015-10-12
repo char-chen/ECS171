@@ -47,14 +47,14 @@ for i = 2:8
   
   for j = 0:4
     [prediction,mat] = OLS(training(:,i), training(:,1), j);
-    MSE_train = sum((training(:,1) -  mat * prediction).^2)/280;
+    MSE_train = sum((training(:,1) -  mat * prediction).^2)/280
     
     l = [];
     for k = 0:j
       l = [l testing(:,i).^k];
     end
     
-    MSE_test = sum((testing(:,1) - l * prediction).^2)/112;
+    MSE_test = sum((testing(:,1) - l * prediction).^2)/112
     
     test = [];
     for k = 0:j
@@ -76,7 +76,7 @@ for i = 0:2
     end
     
     theta = pinv(mat2' * mat2) * mat2' * training(:,1);
-    MSE_train2 = sum((training(:,1) - mat2 * theta ).^2 )/280; 
+    MSE_train2 = sum((training(:,1) - mat2 * theta ).^2 )/280 
     
     for j = 1 : i
       t2 = [t2 testing(:,2:8).^j];
