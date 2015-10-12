@@ -1,6 +1,9 @@
-function [theta, mat] = OLS(X, y, feature, degree)
-    theta = [];
-    mat = [];
-    mat = [mat X.^degree];
-    theta = pinv(mat' * mat) * mat'*y;
+function [theta, mat] = OLS(X, y, degree)
     
+    mat = [];
+    for i = 0: degree
+      mat = [mat X.^degree];
+    end
+    
+    theta = pinv(mat' * mat) * mat'*y;
+end

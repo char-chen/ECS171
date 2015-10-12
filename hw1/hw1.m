@@ -16,7 +16,6 @@ boundary = quantile(mpg, [.33,.66]);
 low = (mpg < boundary(1));
 med = 2 * (mpg >= boundary(1) & mpg <= boundary(2));
 high = 3 * (mpg > boundary(2));
-
 label = low + med + high;
 gplotmatrix(data, [], label);
 
@@ -24,12 +23,15 @@ gplotmatrix(data, [], label);
 
 % problem 4
 rng(100);
-[training, trainingSampleIndex] = datasample(data, 280, 'Replace', false);
+trainingIndex = randsample(392, 280);
+training = [];
 testing = [];
 
-for i = 1:392
-  if ~ismember(i, trainingSampleIndex)
-    testing = [testing; data(i, :)];
+for i = 1 : 392
+  if ismember(i, trainingIndex)
+      training = [training; data(i, :)];
+  else
+      testing = [testing; data(i, :)];
   end
 end
 
@@ -40,11 +42,11 @@ for i = 2:8
   hold
   xlabel(sprintf('#%d feature', i));
   ylabel('mpg');
-  t = (min(data(:,i)):0.1:max(data(:,i)))';
+  t = (min(testing(:,i)):0.1:max(testing(:,i)))';
   
-  for j = 0:4 
-    [prediction,mat] = OLS(training(:,i), mpg(1:280), i, j);
-    MSE_train = sum((trainingSet(:,1) -  mat * prediction).^2)/280;
+  for j = 0:4
+    [prediction,mat] = OLS(training(:,i), training(:,1), j);
+    MSE_train = sum((training(:,1) -  mat * prediction).^2)/280;
     
     l = [];
     for k = 0:j
@@ -54,7 +56,7 @@ for i = 2:8
     MSE_test = sum((testing(:,1) - l * prediction).^2)/112;
     test = [];
     
-    for k = 0:i
+    for k = 0:j
       test = [test  t.^k ];
     end
 
@@ -63,4 +65,8 @@ for i = 2:8
   end
 end
 
-
+% problem 5
+for i = 0:2
+    
+    
+end
