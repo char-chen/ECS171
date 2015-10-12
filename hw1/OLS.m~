@@ -1,9 +1,0 @@
-function coef = OLS(X, y, deg)
-    coef = [];
-    
-    for i = 0:deg
-       coef = [coef X.^i];
-    end
-    
-    coef = pinv(coef'*coef)*coef'*y;
-    
