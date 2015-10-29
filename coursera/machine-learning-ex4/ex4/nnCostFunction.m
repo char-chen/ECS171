@@ -90,7 +90,7 @@ for i = 1:m,
   ra3 = sigmoid(rz3);
 
   err3 = ra3 - ry(i, :)';
-
+    
   err2 = (Theta2' * err3)(2:end, 1) .* sigmoidGradient(rz2);
 
   G1 = G1 + err2 * ra1';
@@ -99,8 +99,6 @@ end
 
 Theta1_grad = G1 / m + lambda * [zeros(hidden_layer_size, 1) Theta1(:, 2:end)] / m;
 Theta2_grad = G2 / m + lambda * [zeros(num_labels, 1) Theta2(:, 2:end)] / m;
-
-
 
 % -------------------------------------------------------------
 
