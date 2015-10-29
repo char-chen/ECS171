@@ -13,6 +13,9 @@
 %   8.  nuc: Score of discriminant analysis of nuclear localization signals
 % 	   of nuclear and non-nuclear proteins.
 
+clc
+clear
+
 close all;
 load ('yeast.txt');
 
@@ -38,22 +41,70 @@ output_layer_size = 10;
 X = training(:, 1:8);
 Y = zeros(965,10);
 y = training(:, 9);
+iterations = 20000;
 
 for i = 1:965
     
     Y(i,y(i,1)) = 1;
 end
-net = newff(minmax(X'),[3 10],{'logsig' 'purelin'}, 'traingd');
-net.trainParam.epochs = 500000;
-    net.trainParam.lr = 0.9;
-    net.trainParam.lr_inc = 0;
-    net.trainParam.lr_dec = 0;
-[net tr] = train(net,X',Y');
+net = newff(minmax(X'),[3 10],{'logsig' 'purelin'}, 'trainbr');
+
+rng(10);
+net.IW{1} = rand(3,8);
+rng(10);
+net.LW{2} =rand(10,3);
 
 
 
+net.trainParam.epochs = 1;
+    net.trainParam.lr = 1;
+    net.trainParam.showWindow = false;
+    changew1 = [];
+    changew2 = [];
+    changeb1 = [];
+    changeb2 = [];
+  
+    for i=1:iterations
+        changew1 = [changew1; net.IW{1}(1,:)];
+        changew2 = [changew2; net.LW{2}(1,:)];
+        changeb1 = [changeb1; net.b{1}(1,:)];
+        changeb2 = [changeb2; net.b{2}(1,:)];
+        [net tr] = train(net,X',Y');
+        
+    end
+
+    
+    
+hold
+    t = 1: iterations;
+    plot(t,changew1(1:iterations,:));
 
 
+
+X = training(:, 1:8);
+Y = zeros(965,10);
+y = training(:, 9);
+
+for i = 1:965
+    
+    Y(i,y(i,1)) = 1;
+end
+
+Z = sim(net, X');
+
+hitNum = 0;
+
+[m,I] = max(Z);
+
+for i = 1 : 965
+    if I(i)==y(i)
+        hitNum = hitNum +1;
+    end
+end
+
+correct1 = (hitNum / 519) * 100;
+
+correct1 = strcat(num2str(correct1),'%')
 
 X = testing(:, 1:8);
 Y = zeros(519,10);
@@ -76,9 +127,9 @@ for i = 1 : 519
     end
 end
 
-correct = (hitNum / 519) * 100;
+correct2 = (hitNum / 519) * 100;
 
-correct = strcat(num2str(correct),'%')
+correct2 = strcat(num2str(correct2),'%')
 % 
 % %%  Random Initialization
 % initial_Theta1 = randomInitialize(input_layer_size, hidden_layer_size);
