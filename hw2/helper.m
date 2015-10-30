@@ -47,69 +47,15 @@ for i = 1:965
     
     Y(i,y(i,1)) = 1;
 end
-net = newff(minmax(X'),[3 10],{'logsig' 'purelin'}, 'traingd');
+net = newff(minmax(X'),[100 10],{'logsig' 'purelin'}, 'trainbr');
 
-rng(10);
-net.IW{1} = rand(3,8);
-rng(10);
-net.LW{2} = rand(10,3);
 
-net.trainParam.epochs = 1;
-net.trainParam.lr = 1;
-net.trainParam.showWindow = false;
-changew1 = [];
-changew2 = [];
-changeb1 = [];
-changeb2 = [];
-  
-for i=1:iterations
-    changew1 = [changew1; net.IW{1}(1,:)];
-    changew2 = [changew2; net.LW{2}(1,:)];
-    changeb1 = [changeb1; net.b{1}(1,:)];
-    changeb2 = [changeb2; net.b{2}(1,:)];
+net.trainParam.epochs = 10000;
+net.trainParam.lr = 0.9;
+
     [net tr] = train(net,X',Y');
-end
 
-hold
-figure(1);
-t = 1: iterations;
-plot(t,changew1(1:iterations,:));
-title('Training Set');
-xlabel('Iterations');
-ylabel('Weight value');
-legend('W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'Location', 'northwest');
-hold off
 
-hold
-figure(2);
-t = 1: iterations;
-plot(t,changew2(1:iterations,:));
-title('Testing Set');
-xlabel('Iterations');
-ylabel('Weight value');
-legend('W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'Location', 'northwest');
-hold off
-
-X = training(:, 1:8);
-Y = zeros(965,10);
-y = training(:, 9);
-
-for i = 1:965
-    Y(i,y(i,1)) = 1;
-end
-
-Z = sim(net, X');
-hitNum = 0;
-[m,I] = max(Z);
-
-for i = 1 : 965
-  if I(i)==y(i)
-    hitNum = hitNum +1;
-  end
-end
-
-correct1 = (hitNum / 519) * 100;
-correct1 = strcat(num2str(correct1),'%')
 
 X = testing(:, 1:8);
 Y = zeros(519,10);
@@ -125,13 +71,13 @@ hitNum = 0;
 
 for i = 1 : 519
     if I(i) == y(i)
-        hitNum = hitNunm +1;
+        hitNum = hitNum +1;
     end
 end
 
 correct2 = (hitNum / 519) * 100;
 correct2 = strcat(num2str(correct2),'%')
 
-%%p5
+
 sample = [0.5, 0.49, 0.52, 0.2, 0.55, 0.03, 0.50, 0.39];
 predict = sim(net, sample')
