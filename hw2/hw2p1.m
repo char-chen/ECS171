@@ -44,7 +44,6 @@ iterations = 10000;
 
 %% ANN
 for i = 1:965
-    
     Y(i,y(i,1)) = 1;
 end
 net = newff(minmax(X'),[3 10],{'logsig' 'purelin'}, 'traingd');
@@ -74,7 +73,7 @@ hold
 figure(1);
 t = 1: iterations;
 plot(t,changew1(1:iterations,:));
-title('Training Set');
+title('Weights 1');
 xlabel('Iterations');
 ylabel('Weight value');
 legend('W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'Location', 'northwest');
@@ -84,7 +83,7 @@ hold
 figure(2);
 t = 1: iterations;
 plot(t,changew2(1:iterations,:));
-title('Testing Set');
+title('Weights 2');
 xlabel('Iterations');
 ylabel('Weight value');
 legend('W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'Location', 'northwest');
@@ -125,13 +124,13 @@ hitNum = 0;
 
 for i = 1 : 519
     if I(i) == y(i)
-        hitNum = hitNunm +1;
+        hitNum = hitNum +1;
     end
 end
 
 correct2 = (hitNum / 519) * 100;
 correct2 = strcat(num2str(correct2),'%')
 
-%%p5
+%%For p5
 sample = [0.5, 0.49, 0.52, 0.2, 0.55, 0.03, 0.50, 0.39];
 predict = sim(net, sample')
